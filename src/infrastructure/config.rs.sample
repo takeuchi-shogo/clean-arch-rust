@@ -1,0 +1,55 @@
+
+
+pub struct Config {
+	pub enviroment: String,
+	// pub db: DB,
+	pub routing: Routing,
+}
+
+// pub struct DB {
+// 	pub production: Production,
+// 	pub test: Test,
+// }
+
+// pub struct Production {
+// 	pub host: String,
+// 	pub db_name: String,
+// 	pub username: String,
+// 	pub password: String,
+// }
+
+// pub struct Test {
+// 	pub test_host: String,
+// 	pub test_db_name: String,
+// 	pub test_username: String,
+// 	pub test_password: String,
+// }
+
+pub struct Routing {
+	pub port: String,
+}
+
+impl Config {
+	pub fn new_config() -> Config {
+		Config {
+			enviroment: String::from("development"),
+			// db: DB {
+			// 	production: Production {
+			// 		host: String::from("host name"),
+			// 		db_name: String::from("db name"),
+			// 		username: String::from("username"),
+			// 		password: String::from("password"),
+			// 	}, 
+			// 	test: Test {
+			// 		test_host: String::from("host name"),
+			// 		test_db_name: String::from("db name"),
+			// 		test_username: String::from("username"),
+			// 		test_password: String::from("password"),
+			// 	},
+			// },
+			routing: Routing {
+				port: String::from(":8080")
+			},
+		}
+	}
+}
