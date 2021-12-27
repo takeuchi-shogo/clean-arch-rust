@@ -1,5 +1,8 @@
 
 // #[macro_use] extern crate rocket;
+use rocket;
+
+// use rocket::fairing::AdHoc;
 
 use super::config::Config;
 // use rocket::{State, Config};
@@ -24,6 +27,15 @@ impl Routing {
 		println!(
 			"{}",
 			port,
-	);
+		);
+		// rocket::build()
+		// 	.mount("/hello", route![index])
+		// 	.attach(AdHoc::config::<Routing>())
+		rocket::ignite().mount("/", routes![index]).launch();
 	}
+}
+
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
 }
