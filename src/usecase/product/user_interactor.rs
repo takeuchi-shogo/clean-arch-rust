@@ -1,11 +1,14 @@
 
+#[derive(Default)]
 pub struct UserInteractor {
-	// word: String,
+	// user: String,
+	pub word: String,
 }
 
 impl UserInteractor {
-	pub fn get(w: String::from) {
+	pub fn get(&self, w: &'static str) -> &'static str {
 		// ここで一旦、変数word　に"Hello World!" を入れたい
-		println!("{}", w)
+		w
+		
 	}
 }
