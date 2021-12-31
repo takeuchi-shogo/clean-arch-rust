@@ -1,4 +1,4 @@
-use crate::usecase::user_repository::UserInterface;
+use crate::usecase::user_interface::UserInterface;
 
 
 pub struct UserRepository {}
