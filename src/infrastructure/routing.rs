@@ -24,19 +24,13 @@ impl Routing {
 	}
 
 	pub fn run(&self, port: u16) {
-		println!(
-			"{}",
-			port,
-		);
 		let config = Config::build(Environment::Staging)
 			// .address("127.0.0.1")
 			.port(port)
 			.unwrap();
+
 		let routing =  rocket::custom(config);
 
-		// let usersController = product::users_controller::new_users_controller();
-		// usersController.get_users();
-		// println!("{}", usersController);
 		routing.mount("/api",
 		 routes![
 				index,
