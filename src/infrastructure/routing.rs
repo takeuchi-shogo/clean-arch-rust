@@ -1,24 +1,23 @@
+// #![feature(proc_macro_hygiene, decl_macro)]
 
-// #[macro_use] extern crate rocket;
+// use std::sync::Arc;
 use rocket;
 
-// use rocket::fairing::AdHoc;
-
-use super::config::AppConfig;
+use super::{config::AppConfig, db::DB};
 use crate::interfaces::controllers::product;
+use crate::infrastructure::db;
 use rocket::config::{ Config, Environment };
-// use rocket::fairing::AdHoc;
-// use rocket::serde::Deserialize;
 
-
-#[derive(Debug)]
-pub struct Routing {
+// #[derive(Debug)]
+pub struct Routing<'a> {
+	pub db: &'a DB,
 	pub port: u16,
 }
 
-impl Routing {
-	pub fn new_routing(cfg: &AppConfig) -> Routing {
+impl Routing<'_> {
+	pub fn new_routing<'a>(cfg: &'a AppConfig, db: &'a DB) -> Routing<'a> {
 		Routing {
+			db,
 			port: cfg.routing.port.to_owned(),
 		}
 	}
@@ -31,13 +30,27 @@ impl Routing {
 
 		let routing =  rocket::custom(config);
 
-		routing.mount("/api",
+		routing
+			.manage(db::init_db())
+			// .mount("/", routes![name])
+			.mount("/api",
 		 routes![
 				index,
-				get_users,
+				name,
+				// get_users,
 				])
 			.launch();
 	}
+
+	pub fn get_user(&self) -> &'static str {
+		let users_controller = product::users_controller::new_users_controller(self::db);
+		users_controller.get_user()
+	}
+}
+
+#[get("/<name>")]
+fn name(name: String) -> String {
+	format!("Hello, {}", name)
 }
 
 #[get("/hello")]
@@ -46,7 +59,8 @@ fn index() -> &'static str {
 }
 
 #[get("/users")]
-pub fn get_users() -> &'static str {
-	let users_controller = product::users_controller::new_users_controller();
-	users_controller.get_user()
+fn get_users() -> &'static str {
+	// let users_controller = product::users_controller::new_users_controller(db);
+	// users_controller.get_user()
+	&Routing::get_user()
 }

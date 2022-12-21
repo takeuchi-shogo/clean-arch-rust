@@ -2,6 +2,8 @@
 use std::sync::Arc;
 
 use crate::interfaces::gateways::database;
+use crate::interfaces::gateways::database::db::DB;
+use crate::interfaces::gateways::database::db_repository::DBRepository;
 use crate::usecase::product::user_interactor::UserInteractor;
 
 // #[derive(Default)]
@@ -9,10 +11,11 @@ pub struct UsersController {
 	pub interactor: UserInteractor,
 }
 
-pub fn new_users_controller() -> UsersController {
+pub fn new_users_controller(db: Arc<dyn DB + Send + Sync>) -> UsersController {
 	UsersController {
 		interactor: UserInteractor{
-			user: Arc::new(database::user_repository::UserRepository::new()),
+			db: Arc::new(DBRepository{ db: db }),
+			user: Arc::new(database::user_repository::UserRepository{}),
 			// word: "a".to_string(),
 		},
 	}
